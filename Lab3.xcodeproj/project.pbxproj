@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C00A01431F7B0F98008FC366 /* GameStoryBoard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C00A01411F7B0F98008FC366 /* GameStoryBoard.storyboard */; };
 		C0130EE41F78655B0070A64C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0130EE31F78655B0070A64C /* AppDelegate.swift */; };
 		C0130EE61F78655B0070A64C /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C0130EE51F78655B0070A64C /* GameScene.sks */; };
 		C0130EE81F78655B0070A64C /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = C0130EE71F78655B0070A64C /* Actions.sks */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C00A01421F7B0F98008FC366 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Lab3/Base.lproj/GameStoryBoard.storyboard; sourceTree = "<group>"; };
 		C0130EE01F78655B0070A64C /* Lab3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lab3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0130EE31F78655B0070A64C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C0130EE51F78655B0070A64C /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				C0130EE71F78655B0070A64C /* Actions.sks */,
 				C0130EE91F78655B0070A64C /* GameScene.swift */,
 				C0130EEB1F78655B0070A64C /* GameViewController.swift */,
+				C00A01411F7B0F98008FC366 /* GameStoryBoard.storyboard */,
 				C0130EED1F78655B0070A64C /* Main.storyboard */,
 				C0130EF01F78655B0070A64C /* Assets.xcassets */,
 				C0130EF21F78655B0070A64C /* LaunchScreen.storyboard */,
@@ -246,6 +249,7 @@
 				C0130EF11F78655B0070A64C /* Assets.xcassets in Resources */,
 				C0130EF41F78655B0070A64C /* LaunchScreen.storyboard in Resources */,
 				C0130EE81F78655B0070A64C /* Actions.sks in Resources */,
+				C00A01431F7B0F98008FC366 /* GameStoryBoard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +312,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		C00A01411F7B0F98008FC366 /* GameStoryBoard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C00A01421F7B0F98008FC366 /* Base */,
+			);
+			name = GameStoryBoard.storyboard;
+			sourceTree = "<group>";
+		};
 		C0130EED1F78655B0070A64C /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
