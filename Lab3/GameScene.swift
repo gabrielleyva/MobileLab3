@@ -16,17 +16,28 @@ class GameScene: SKScene {
     private var motionManager: CMMotionManager?
     private var bg1: SKSpriteNode?
     private var bg2: SKSpriteNode?
+    private var meteors = [SKEmitterNode]()
     var destX:CGFloat?
+    var timer = Timer()
     
     override func didMove(to view: SKView) {
         prepareMotionManager()
         createSpaceship()
         createBackground()
-        createMeteor()
+        createBoundries()
+        scheduleMeteorShower()
         
         //set screen bounds
         self.view?.bounds = CGRect(x: 0, y: 0, width: (self.view?.frame.size.width)!, height: (self.view?.frame.size.height)!)
         
+        self.physicsWorld.gravity = CGVector(dx: 0.0, dy: -4.0)
+        
+    }
+    
+    fileprivate func createBoundries(){
+        let bottomOffset = CGFloat(400.0);
+        let newFrame = CGRect(x: 0.0, y: -bottomOffset, width: self.frame.size.width, height: self.frame.size.height + bottomOffset)
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: newFrame)
     }
     
     fileprivate func prepareMotionManager() {
@@ -54,11 +65,15 @@ class GameScene: SKScene {
         }
     }
     
-    fileprivate func createMeteor() {
-        if let particles = SKEmitterNode(fileNamed: "meteor.sks") {
-            particles.position = CGPoint(x: 150, y: 250)
-            addChild(particles)
+    fileprivate func createMeteor() -> SKEmitterNode{
+        if let particle = SKEmitterNode(fileNamed: "meteor.sks") {
+            particle.position = CGPoint(x: (self.spaceship?.position.x)!, y: frame.size.height)
+            particle.physicsBody = SKPhysicsBody(circleOfRadius: 25)
+            
+            return particle
         }
+        
+        return SKEmitterNode()
     }
     
     fileprivate func createSpaceship() {
@@ -102,11 +117,20 @@ class GameScene: SKScene {
         }
     }
     
+    fileprivate func scheduleMeteorShower(){
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.generateMeteors), userInfo: nil, repeats: true)
+    }
+    
+    @objc fileprivate func generateMeteors() {
+        let node = self.createMeteor()
+        self.addChild(node)
+        self.meteors.append(node)
+    }
     
 
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
-        let action = SKAction.moveTo(x: destX!, duration: 1)
+        let action = SKAction.moveTo(x: destX!, duration: 0.8)
         self.spaceship?.run(action)
         self.animateBackground()
     }
