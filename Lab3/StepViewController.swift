@@ -9,29 +9,39 @@
 import UIKit
 import CoreMotion
 
+
 class StepViewController: UIViewController {
     
+    
     // MARK: Class Variables
+    let GOALKEY = "STEPGOAL"
     let activityManager = CMMotionActivityManager()
     let pedometer = CMPedometer()
     var previousActivityConfidence: CMMotionActivityConfidence = CMMotionActivityConfidence.low
+    let userDefaults = UserDefaults()
     
     // MARK: UIElements
     @IBOutlet weak var actionImage: UIImageView!
     @IBOutlet weak var actionLabel: UILabel!
     @IBOutlet weak var confidenceLabel: UILabel!
+    @IBOutlet weak var stepsTodayLabel: UILabel!
+    @IBOutlet weak var stepsYesterdayLabel: UILabel!
+    @IBOutlet weak var stepsGoalLabel: UILabel!
+    @IBOutlet weak var gameButton: UIButton!
+    @IBOutlet weak var stepProgressBar: UIProgressView!
     
-    @IBOutlet weak var pedometerCount: UILabel!
-    @IBOutlet weak var label: UILabel!
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+    }
     
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        prepareUI()
+       // self.getStartTimeForYesterday()
         self.startActivityMonitoring()
-        self.startPedometerMonitoring()
+        self.monitorStepCountForToday()
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,7 +62,7 @@ class StepViewController: UIViewController {
                     DispatchQueue.main.async{
                         //
                         self.updateAction(activty: unwrappedActivity)
-                        self.label.text = "Walking: \(unwrappedActivity.walking) \n Still: \(unwrappedActivity.stationary)"
+                      //  self.label.text = "Walking: \(unwrappedActivity.walking) \n Still: \(unwrappedActivity.stationary)"
 
                     }
                 }
@@ -60,11 +70,11 @@ class StepViewController: UIViewController {
         }
     }
 
-    func startPedometerMonitoring(){
+    func monitorStepCountForToday(){
         
         //separate out the handler for better readability
         if CMPedometer.isStepCountingAvailable(){
-            pedometer.startUpdates(from: Date(), withHandler: self.handlePedometer as CMPedometerHandler!)
+            pedometer.startUpdates(from: self.getStartTimeForToday(), withHandler: self.handlePedometer as CMPedometerHandler!)
         }
     }
     
@@ -72,9 +82,18 @@ class StepViewController: UIViewController {
     func handlePedometer(_ pedData:CMPedometerData?, error:Error?) -> Void{
         if pedData != nil {
             let steps = pedData?.numberOfSteps
+            let goal = self.userDefaults.integer(forKey: self.GOALKEY)
+            let progress = (steps?.floatValue ?? 0.0)/Float(goal)
             DispatchQueue.main.async{
                // self.pedometerCount.setValue((steps?.floatValue)!, animated: true)
-                self.pedometerCount.text = "Steps: \(steps!)"
+                self.stepsTodayLabel.text = "\(steps!)"
+                if(progress<=1){
+                    self.stepProgressBar.setProgress(progress, animated: true)
+                    self.setUpGameButton(shouldEnable: false, stepsLeft: goal - (steps?.intValue)!)
+                } else{
+                    self.stepProgressBar.setProgress(1.0, animated: true)
+                    self.setUpGameButton(shouldEnable: false, stepsLeft: nil)
+                }
             }
         }
     }
@@ -113,6 +132,93 @@ class StepViewController: UIViewController {
             break
         }
         
+    }
+    
+    @IBAction func gameButtonPressed(_ sender: UIButton) {
+        // Launch game here
+        print("button pressed")
+    }
+    
+    @IBAction func editStepGoal(_ sender: UIBarButtonItem) {
+        // View step goal settings
+        self.setUpGameButton(shouldEnable: true, stepsLeft: nil)
+    }
+    
+    func getStartTimeForToday() -> Date {
+        return Calendar.current.startOfDay(for: Date())
+    }
+    func getStartTimeForYesterday() -> Date{
+        let today = self.getStartTimeForToday()
+        return today.addingTimeInterval(-24*60*60)
+    }
+    func getEndTimeForYesterday() -> Date{
+        let today = self.getStartTimeForToday()
+        return today.addingTimeInterval(-1)
+    }
+    
+    func prepareUI() -> Void {
+        // Set steps taken today
+        var stepsToday:NSNumber = 0
+        if CMPedometer.isStepCountingAvailable(){
+            pedometer.queryPedometerData(from: self.getStartTimeForToday(), to: Date())
+            {(data:CMPedometerData?, error:Error?) -> Void in
+                if (error == nil){
+                    stepsToday = data?.numberOfSteps ?? 0
+                    DispatchQueue.main.async {
+                        self.stepsTodayLabel.text = "\(data?.numberOfSteps ?? 0)"
+                    }
+                }
+            }
+            pedometer.queryPedometerData(from: self.getStartTimeForYesterday(), to: self.getEndTimeForYesterday())
+            {(data:CMPedometerData?, error:Error?) -> Void in
+                if (error == nil){
+                    DispatchQueue.main.async {
+                        self.stepsYesterdayLabel.text = "\(data?.numberOfSteps ?? 0)"
+                    }
+                }
+            }
+        }
+        let goal = userDefaults.integer(forKey: GOALKEY)
+        var progress = stepsToday.floatValue/(Float(goal))
+        if (goal != 0 ){
+            DispatchQueue.main.async {
+                self.stepsGoalLabel.text = "\(goal)"
+                if(progress<=1){
+                    self.stepProgressBar.setProgress(progress, animated: true)
+                    self.setUpGameButton(shouldEnable: false, stepsLeft: goal - stepsToday.intValue)
+
+                } else{
+                    self.stepProgressBar.setProgress(1.0, animated: true)
+                    self.setUpGameButton(shouldEnable: true, stepsLeft: nil)
+
+                }
+            }
+        } else {
+            userDefaults.set(1000, forKey: GOALKEY)
+            progress = stepsToday.floatValue/1000.0
+            DispatchQueue.main.async {
+                self.stepsGoalLabel.text = "1000"
+                if(progress<=1){
+                    self.stepProgressBar.setProgress(progress, animated: true)
+                    self.setUpGameButton(shouldEnable: false, stepsLeft: 1000 - stepsToday.intValue)
+                } else{
+                    self.stepProgressBar.setProgress(1.0, animated: true)
+                    self.setUpGameButton(shouldEnable: true, stepsLeft: nil)
+                }
+            }
+        }
+    }
+    
+    func setUpGameButton(shouldEnable:Bool, stepsLeft:Int?) -> Void {
+        if shouldEnable{
+            self.gameButton.isEnabled = true
+            self.gameButton.backgroundColor = UIColor(red: 0, green: 143, blue: 0, alpha: 1)
+            self.gameButton.setTitle("🚀 Play game", for: UIControlState.normal)
+        } else{
+            self.gameButton.isEnabled = false
+            self.gameButton.backgroundColor = UIColor.darkGray
+            self.gameButton.setTitle("\(stepsLeft ?? 100) steps left !", for: UIControlState.disabled)
+        }
     }
     
     /*
