@@ -30,6 +30,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var score = 0
     var hit = false
     var start = false
+    var gameOver = false
+    var multiplier = 1
+    let userDefaults = UserDefaults()
+    let MULTIPLIERKEY = "MULTIPLIER"
+    let HIGHSCOREKEY = "HIGHSCORE"
     
     override func didMove(to view: SKView) {
         createBackground()
@@ -89,13 +94,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     fileprivate func prepareLabel() {
         //score label set up
+        self.multiplier = self.userDefaults.integer(forKey: MULTIPLIERKEY)
         self.label = SKLabelNode(fontNamed: "Avenir-BlackOblique")
         self.label.color = .white
-        self.label.text = "Score: 0"
+        self.label.text = "Score: 0 x\(self.multiplier)"
         self.label.position = CGPoint(x: (self.view?.frame.size.width)! - 120, y: (self.view?.frame.size.height)! - 55)
         self.label.zPosition = 1
         self.label.fontSize = CGFloat(42)
         self.addChild(self.label)
+        
     }
     
     fileprivate func createMeteor() -> SKEmitterNode{
@@ -176,8 +183,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let complete = SKAction.run {
                 node.removeFromParent()
                 //score updated
-                self.score = self.score + 1
-                self.label.text = "Score: " + String(self.score)
+                if (!self.gameOver){
+                    self.score = self.score + (1*self.multiplier)
+                    self.label.text = "Score: " + String(self.score)+" x\(self.multiplier)"
+                }
             }
             
             node.run(SKAction.sequence([wait, complete]))
@@ -198,10 +207,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if start == false {
             start = true
             hit = false
+            gameOver = false
             self.bigLabel.removeFromParent()
             createSpaceship()
             prepareMotionManager()
             scheduleMeteorShower()
+            self.label.text = "Score: 0 x\(self.multiplier)"
         }
     }
     
@@ -225,10 +236,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if firstBody.categoryBitMask == meteorCategory && secondBody.categoryBitMask == spaceshipCategory {
             start = false
             hit = true
+            let last_score = score
             score = 0
+            self.gameOver = true
             self.timer.invalidate()
             self.spaceship?.removeFromParent()
             self.prepareBigLabel(text: " Game Over!\nTap To Restart")
+            let highscore = self.userDefaults.integer(forKey: HIGHSCOREKEY)
+            if (last_score > highscore){
+                self.userDefaults.set(last_score, forKey: HIGHSCOREKEY)
+            }
         }
 
     }

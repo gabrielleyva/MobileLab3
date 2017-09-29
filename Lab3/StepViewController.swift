@@ -15,6 +15,7 @@ class StepViewController: UIViewController {
     
     // MARK: Class Variables
     let GOALKEY = "STEPGOAL"
+    let MULTIPLIERKEY = "MULTIPLIER"
     let activityManager = CMMotionActivityManager()
     let pedometer = CMPedometer()
     var previousActivityConfidence: CMMotionActivityConfidence = CMMotionActivityConfidence.low
@@ -229,6 +230,20 @@ class StepViewController: UIViewController {
         self.pedometer.stopEventUpdates()
         self.activityManager.stopActivityUpdates()
         //print("View will dissapear")
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Update multiplier
+        print("Segue Multiplier Update")
+        let goal = Int(self.stepsGoalLabel.text!) ?? 1000
+        let stepsTaken = Int(self.stepsTodayLabel.text!) ?? 1
+        let mul = (stepsTaken - (stepsTaken % goal) ) / goal
+        if (mul <= 1){
+            self.userDefaults.set(1, forKey: MULTIPLIERKEY)
+        }else{
+            self.userDefaults.set(mul, forKey: MULTIPLIERKEY)
+        }
+        
     }
     /*
     // MARK: - Navigation
