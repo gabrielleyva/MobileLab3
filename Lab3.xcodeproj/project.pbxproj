@@ -11,6 +11,7 @@
 		9B46B6C41F7BF4330091044E /* StepsGUI.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B46B6C31F7BF4330091044E /* StepsGUI.storyboard */; };
 		9B46B6C61F7BF70D0091044E /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B46B6C51F7BF70D0091044E /* StepViewController.swift */; };
 		C00A01431F7B0F98008FC366 /* GameStoryBoard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C00A01411F7B0F98008FC366 /* GameStoryBoard.storyboard */; };
+		C00A01451F7B4D7B008FC366 /* meteor.sks in Resources */ = {isa = PBXBuildFile; fileRef = C00A01441F7B4D7B008FC366 /* meteor.sks */; };
 		C0130EE41F78655B0070A64C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0130EE31F78655B0070A64C /* AppDelegate.swift */; };
 		C0130EE61F78655B0070A64C /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C0130EE51F78655B0070A64C /* GameScene.sks */; };
 		C0130EE81F78655B0070A64C /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = C0130EE71F78655B0070A64C /* Actions.sks */; };
@@ -45,6 +46,7 @@
 		9B46B6C31F7BF4330091044E /* StepsGUI.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = StepsGUI.storyboard; sourceTree = "<group>"; };
 		9B46B6C51F7BF70D0091044E /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		C00A01421F7B0F98008FC366 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Lab3/Base.lproj/GameStoryBoard.storyboard; sourceTree = "<group>"; };
+		C00A01441F7B4D7B008FC366 /* meteor.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = meteor.sks; sourceTree = "<group>"; };
 		C0130EE01F78655B0070A64C /* Lab3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lab3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0130EE31F78655B0070A64C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C0130EE51F78655B0070A64C /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				9B2028201F7D9854005A4691 /* GoalViewController.swift */,
 				9B46B6C51F7BF70D0091044E /* StepViewController.swift */,
 				C0130EF51F78655B0070A64C /* Info.plist */,
+				C00A01441F7B4D7B008FC366 /* meteor.sks */,
 			);
 			path = Lab3;
 			sourceTree = "<group>";
@@ -255,6 +258,7 @@
 			files = (
 				C0130EEF1F78655B0070A64C /* Main.storyboard in Resources */,
 				9B46B6C41F7BF4330091044E /* StepsGUI.storyboard in Resources */,
+				C00A01451F7B4D7B008FC366 /* meteor.sks in Resources */,
 				C0130EE61F78655B0070A64C /* GameScene.sks in Resources */,
 				C0130EF11F78655B0070A64C /* Assets.xcassets in Resources */,
 				C0130EF41F78655B0070A64C /* LaunchScreen.storyboard in Resources */,
