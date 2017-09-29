@@ -32,16 +32,16 @@ class StepViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        //print("View will appear")
+        // Do any additional setup after loading the view.
+        self.startActivityMonitoring()
+        self.monitorStepCountForToday()
+        self.prepareUI()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
-        prepareUI()
-       // self.getStartTimeForYesterday()
-        self.startActivityMonitoring()
-        self.monitorStepCountForToday()
+        //print("View did load")
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,28 +71,31 @@ class StepViewController: UIViewController {
     }
 
     func monitorStepCountForToday(){
-        
+        print("Pedometer update")
         //separate out the handler for better readability
         if CMPedometer.isStepCountingAvailable(){
+            print("Pedometer counting available")
             pedometer.startUpdates(from: self.getStartTimeForToday(), withHandler: self.handlePedometer as CMPedometerHandler!)
         }
     }
     
     //ped handler
     func handlePedometer(_ pedData:CMPedometerData?, error:Error?) -> Void{
+        print("Pedometer handeler")
+
         if pedData != nil {
-            let steps = pedData?.numberOfSteps
+            let steps = pedData!.numberOfSteps
             let goal = self.userDefaults.integer(forKey: self.GOALKEY)
-            let progress = (steps?.floatValue ?? 0.0)/Float(goal)
+            let progress = (steps.floatValue)/Float(goal)
             DispatchQueue.main.async{
                // self.pedometerCount.setValue((steps?.floatValue)!, animated: true)
-                self.stepsTodayLabel.text = "\(steps!)"
+                self.stepsTodayLabel.text = "\(steps)"
                 if(progress<=1){
                     self.stepProgressBar.setProgress(progress, animated: true)
-                    self.setUpGameButton(shouldEnable: false, stepsLeft: goal - (steps?.intValue)!)
+                    self.setUpGameButton(shouldEnable: false, stepsLeft: goal - (steps.intValue))
                 } else{
                     self.stepProgressBar.setProgress(1.0, animated: true)
-                    self.setUpGameButton(shouldEnable: false, stepsLeft: nil)
+                    self.setUpGameButton(shouldEnable: true, stepsLeft: nil)
                 }
             }
         }
@@ -141,7 +144,7 @@ class StepViewController: UIViewController {
     
     @IBAction func editStepGoal(_ sender: UIBarButtonItem) {
         // View step goal settings
-        self.setUpGameButton(shouldEnable: true, stepsLeft: nil)
+        //self.setUpGameButton(shouldEnable: true, stepsLeft: nil)
     }
     
     func getStartTimeForToday() -> Date {
@@ -221,6 +224,12 @@ class StepViewController: UIViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        self.pedometer.stopEventUpdates()
+        self.activityManager.stopActivityUpdates()
+        //print("View will dissapear")
+    }
     /*
     // MARK: - Navigation
 
