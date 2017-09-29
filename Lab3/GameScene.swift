@@ -34,7 +34,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var multiplier = 1
     let userDefaults = UserDefaults()
     let MULTIPLIERKEY = "MULTIPLIER"
-    let HIGHSCOREKEY = "HIGHSCORE"
     
     override func didMove(to view: SKView) {
         createBackground()
@@ -84,6 +83,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.bigLabel = SKLabelNode(fontNamed: "Avenir-BlackOblique")
         self.bigLabel.color = .white
         self.bigLabel.text = text
+        self.bigLabel.horizontalAlignmentMode = .center
         self.bigLabel.position = CGPoint(x: ((self.view?.frame.size.width)! / 2) - (self.label.frame.size.width), y: (self.view?.frame.size.height)! / 2 - (self.label.frame.size.height))
         self.bigLabel.zPosition = 1
         self.bigLabel.numberOfLines = 2
@@ -98,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.label = SKLabelNode(fontNamed: "Avenir-BlackOblique")
         self.label.color = .white
         self.label.text = "Score: 0 x\(self.multiplier)"
-        self.label.position = CGPoint(x: (self.view?.frame.size.width)! - 120, y: (self.view?.frame.size.height)! - 55)
+        self.label.position = CGPoint(x: (self.view?.frame.size.width)! - 130, y: (self.view?.frame.size.height)! - 145)
         self.label.zPosition = 1
         self.label.fontSize = CGFloat(42)
         self.addChild(self.label)
@@ -242,10 +242,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.timer.invalidate()
             self.spaceship?.removeFromParent()
             self.prepareBigLabel(text: " Game Over!\nTap To Restart")
-            let highscore = self.userDefaults.integer(forKey: HIGHSCOREKEY)
-            if (last_score > highscore){
-                self.userDefaults.set(last_score, forKey: HIGHSCOREKEY)
-            }
         }
 
     }
