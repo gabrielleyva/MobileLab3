@@ -88,6 +88,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     fileprivate func prepareLabel() {
+        //score label set up
         self.label = SKLabelNode(fontNamed: "Avenir-BlackOblique")
         self.label.color = .white
         self.label.text = "Score: 0"
@@ -174,6 +175,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let wait = SKAction.wait(forDuration: 3)
             let complete = SKAction.run {
                 node.removeFromParent()
+                //score updated
                 self.score = self.score + 1
                 self.label.text = "Score: " + String(self.score)
             }

@@ -145,6 +145,7 @@
                                 <state key="disabled" title="100 steps left!"/>
                                 <connections>
                                     <action selector="gameButtonPressed:" destination="q78-of-hBd" eventType="touchUpInside" id="iCd-XS-cxY"/>
+                                    <segue destination="xs0-c5-Cbb" kind="show" id="ThV-Hw-Rft"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -216,6 +217,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XHe-7A-BuY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="551.25" y="372.88732394366195"/>
+        </scene>
+        <!--GameStoryBoard-->
+        <scene sceneID="vkb-w2-uZX">
+            <objects>
+                <viewControllerPlaceholder storyboardName="GameStoryBoard" id="xs0-c5-Cbb" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iiv-ra-4XN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="551" y="868"/>
         </scene>
         <!--Goal View Controller-->
         <scene sceneID="JUO-KI-bKH">
